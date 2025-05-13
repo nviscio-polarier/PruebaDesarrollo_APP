@@ -1,7 +1,7 @@
-export const datasourceTokens = async (ID_PERSONA) => {
+export const dataSourceGetLavanderias = async () => {
   try {
     const response = await fetch(
-      `https://localhost:7136/odata/getResumenTokensPersona?idPersona=${ID_PERSONA}`
+      `https://localhost:7136/odata/dataSourceGetLavanderias`
     );
     const result = await response.json();
     setDataTokens(result);
