@@ -2,8 +2,9 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { Button } from "react-native-web";
 import { colors } from "../../styles/base";
+import { Dropdown } from "react-native-element-dropdown";
 
-const MainComponent = () => {
+export default function MainComponent({ navigation }) {
   const [lavanderias, setLavanderias] = useState([]);
   const [personas, setPersonas] = useState([]);
   const [vehiculos, setVehiculos] = useState([]);
@@ -11,6 +12,7 @@ const MainComponent = () => {
   const [lavanderiaSelccionada, setLavanderiaSelccionada] = useState([]);
   const [personaSeleccionada, setPersonaSeleccionada] = useState([]);
   const [vehiculoSeleccionado, setVehiculoSeleccionado] = useState([]);
+  const [value, setValue] = useState(null);
 
   //DataSource lavanderias
   useEffect(() => {
@@ -101,7 +103,11 @@ const MainComponent = () => {
   return (
     <View style={styles.mainComponent}>
       <View>
-        <select id="lavanderias" onChange={getLavanderia}>
+        <select
+          id="lavanderias"
+          onChange={getLavanderia}
+          style={styles.options}
+        >
           {lavanderias.map((l) => (
             <option key={l.idLavanderia} value={l.idLavanderia}>
               {l.denominacion}
@@ -110,7 +116,7 @@ const MainComponent = () => {
         </select>
       </View>
       <View>
-        <select id="personas" onChange={getPersona}>
+        <select id="personas" onChange={getPersona} style={styles.options}>
           {personas.map((p) => (
             <option key={p.idPersona} value={p.idPersona}>
               {p.nombre}
@@ -119,7 +125,7 @@ const MainComponent = () => {
         </select>
       </View>
       <View>
-        <select id="vehiculos" onChange={getVehiculo}>
+        <select id="vehiculos" onChange={getVehiculo} style={styles.options}>
           {vehiculos.map((v) => (
             <option key={v.idVehiculo} value={v.idVehiculo}>
               {v.matricula}
@@ -127,10 +133,25 @@ const MainComponent = () => {
           ))}
         </select>
       </View>
-      <Button title="Siguiente" />
+      {/* <View>
+        <Dropdown
+          data={lavanderias}
+          labelField="denominacion"
+          valueField="idLavanderia"
+          placeholder="Selecciona lavanderia"
+          value={value}
+          onChange={(item) => {
+            setLavanderiaSelccionada(item.value);
+          }}
+        />
+      </View> */}
+      <Button
+        title="Siguiente"
+        onPress={() => navigation.navigate("Botones")}
+      />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   mainComponent: {
@@ -140,7 +161,7 @@ const styles = StyleSheet.create({
     width: "200px",
     color: colors.lightBlack,
   },
-  button: {},
+  options: {
+    marginBottom: "10px",
+  },
 });
-
-export default MainComponent;
