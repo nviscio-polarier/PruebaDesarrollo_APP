@@ -12,6 +12,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
+          {/* CAMBIAR ORDEN */}
           <Stack.Screen name="Selector" component={MainComponent} />
           <Stack.Screen name="Botones" component={PantallaLlave} />
         </Stack.Navigator>

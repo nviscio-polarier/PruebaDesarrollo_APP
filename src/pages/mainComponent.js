@@ -2,7 +2,6 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { Button } from "react-native-web";
 import { colors } from "../../styles/base";
-import { Dropdown } from "react-native-element-dropdown";
 
 export default function MainComponent({ navigation }) {
   const [lavanderias, setLavanderias] = useState([]);
@@ -12,7 +11,9 @@ export default function MainComponent({ navigation }) {
   const [lavanderiaSelccionada, setLavanderiaSelccionada] = useState([]);
   const [personaSeleccionada, setPersonaSeleccionada] = useState([]);
   const [vehiculoSeleccionado, setVehiculoSeleccionado] = useState([]);
-  const [value, setValue] = useState(null);
+  const [datosMandados, setDatosMandados] = useState([]);
+
+  // const [value, setValue] = useState(null);
 
   //DataSource lavanderias
   useEffect(() => {
@@ -100,6 +101,17 @@ export default function MainComponent({ navigation }) {
     console.log(id);
   };
 
+  // Objeto que se manda a la otra pantalla
+  const datos = () => {
+    const datosMandados = {
+      idLavanderia: lavanderiaSelccionada,
+      idVehiculo: vehiculoSeleccionado,
+      idPersona: personaSeleccionada,
+    };
+
+    setDatosMandados(datosMandados);
+  };
+
   return (
     <View style={styles.mainComponent}>
       <View>
@@ -133,21 +145,16 @@ export default function MainComponent({ navigation }) {
           ))}
         </select>
       </View>
-      {/* <View>
-        <Dropdown
-          data={lavanderias}
-          labelField="denominacion"
-          valueField="idLavanderia"
-          placeholder="Selecciona lavanderia"
-          value={value}
-          onChange={(item) => {
-            setLavanderiaSelccionada(item.value);
-          }}
-        />
-      </View> */}
       <Button
         title="Siguiente"
-        onPress={() => navigation.navigate("Botones")}
+        onPress={() => {
+          datos();
+          navigation.navigate("Botones", {
+            idLavanderia: lavanderiaSelccionada,
+            idPersona: personaSeleccionada,
+            idVehiculo: vehiculoSeleccionado,
+          });
+        }}
       />
     </View>
   );
