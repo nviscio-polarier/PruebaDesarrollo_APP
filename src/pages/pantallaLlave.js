@@ -6,7 +6,6 @@ export default function PantallaLlave({ route }) {
   const [dejar, setDejar] = useState(false);
   const [registroRecogida, setRegistroRecogida] = useState([]);
   const [registroDejada, setRegistroDejada] = useState([]);
-
   const { idLavanderia } = route.params;
   const { idPersona } = route.params;
   const { idVehiculo } = route.params;
@@ -21,6 +20,8 @@ export default function PantallaLlave({ route }) {
 
     setRegistroRecogida(nuevoRegistroEntrada);
     console.log("Registro de recogida realizado:", nuevoRegistroEntrada);
+
+    //LOGICA POST
   };
 
   const crearRegistroDejada = () => {
@@ -33,6 +34,8 @@ export default function PantallaLlave({ route }) {
 
     setRegistroDejada(nuevoRegistroDejada);
     console.log("Registro de dejada realizado:", nuevoRegistroDejada);
+
+    //LOGICA POST
   };
 
   return (

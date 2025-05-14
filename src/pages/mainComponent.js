@@ -7,15 +7,12 @@ export default function MainComponent({ navigation }) {
   const [lavanderias, setLavanderias] = useState([]);
   const [personas, setPersonas] = useState([]);
   const [vehiculos, setVehiculos] = useState([]);
-  const [cargando, setCargando] = useState(true);
   const [lavanderiaSelccionada, setLavanderiaSelccionada] = useState([]);
   const [personaSeleccionada, setPersonaSeleccionada] = useState([]);
   const [vehiculoSeleccionado, setVehiculoSeleccionado] = useState([]);
-  const [datosMandados, setDatosMandados] = useState([]);
+  const [cargando, setCargando] = useState(true);
 
-  // const [value, setValue] = useState(null);
-
-  //DataSource lavanderias
+  //DataSource lavanderias (EXTERNALIZARLAS EN UTILS)
   useEffect(() => {
     const dataSourceGetLavanderias = async () => {
       try {
@@ -101,17 +98,6 @@ export default function MainComponent({ navigation }) {
     console.log(id);
   };
 
-  // Objeto que se manda a la otra pantalla
-  const datos = () => {
-    const datosMandados = {
-      idLavanderia: lavanderiaSelccionada,
-      idVehiculo: vehiculoSeleccionado,
-      idPersona: personaSeleccionada,
-    };
-
-    setDatosMandados(datosMandados);
-  };
-
   return (
     <View style={styles.mainComponent}>
       <View>
@@ -148,7 +134,6 @@ export default function MainComponent({ navigation }) {
       <Button
         title="Siguiente"
         onPress={() => {
-          datos();
           navigation.navigate("Botones", {
             idLavanderia: lavanderiaSelccionada,
             idPersona: personaSeleccionada,
