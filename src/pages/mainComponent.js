@@ -32,27 +32,22 @@ const MainComponent = () => {
     dataSourceGetLavanderias();
   }, []);
 
-  useEffect(() => {
-    const dataSourceGetPersonasLavanderia = async (idLavanderia) => {
-      try {
-        const response = await fetch(
-          `https://localhost:7136/odata/getPersonasLavanderia?idLavanderia=${idLavanderia}`
-        );
-        const data = await response.json();
+  const dataSourceGetPersonasLavanderia = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7136/odata/getPersonasLavanderia?idLavanderia=${lavanderiaSelccionada}`
+      );
+      const data = await response.json();
+      setPersonas(data);
+      console.log("DATAAAAA:", data);
+    } catch (error) {
+      console.log("ERROR API PERSONAS");
+    } finally {
+      setCargando(false);
+    }
+  };
 
-        if (!data || data.lenght == 0) {
-          console.log("Array de personas vacio:");
-        } else {
-          setPersonas(data);
-          console.log("Personas recibidas:", data);
-        }
-      } catch (error) {
-        console.log("ERROR API PERSONAS");
-        return;
-      } finally {
-        setCargando(false);
-      }
-    };
+  useEffect(() => {
     dataSourceGetPersonasLavanderia();
   }, [lavanderiaSelccionada]);
 
