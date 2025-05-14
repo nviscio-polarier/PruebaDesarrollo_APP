@@ -14,8 +14,8 @@ export default function PantallaLlave({ route }) {
   const crearRegistroEntrada = () => {
     const nuevoRegistroEntrada = {
       idTquilla: 1,
-      idVehiculo: 1,
-      idPersona: 1,
+      idVehiculo: idVehiculo,
+      idPersona: idPersona,
       fechaRecogida: new Date(),
     };
 
@@ -26,8 +26,8 @@ export default function PantallaLlave({ route }) {
   const crearRegistroDejada = () => {
     const nuevoRegistroDejada = {
       idTquilla: 1,
-      idVehiculo: 1,
-      idPersona: 1,
+      idVehiculo: idVehiculo,
+      idPersona: idPersona,
       fechaDejada: new Date(),
     };
 
