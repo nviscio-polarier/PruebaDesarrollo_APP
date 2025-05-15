@@ -9,12 +9,15 @@ export default function PantallaLlave({ route }) {
   const [dejar, setDejar] = useState(false);
   const [registroRecogida, setRegistroRecogida] = useState([]);
   const [registroDejada, setRegistroDejada] = useState([]);
-
   const [posTaquilla, setPosTaquilla] = useState([]);
 
+  //Parametros que llegan de la otra pantalla
   const { idLavanderia } = route.params;
+  const { labelLavanderia } = route.params;
   const { idPersona } = route.params;
+  const { labelPersona } = route.params;
   const { idVehiculo } = route.params;
+  const { lavelVehiculo } = route.params;
 
   const crearRegistroEntrada = () => {
     const nuevoRegistroEntrada = {
@@ -53,15 +56,15 @@ export default function PantallaLlave({ route }) {
         <View style={styles.contenedorLabels}>
           <View style={styles.iconosLabels}>
             <MaterialCommunityIcons name="account" size={20} color={"black"} />
-            <Text style={styles.text}>Nico Viscio</Text>
+            <Text style={styles.text}>{labelPersona}</Text>
           </View>
           <View style={styles.iconosLabels}>
             <MaterialCommunityIcons name="factory" size={20} color={"black"} />
-            <Text style={styles.text}>Son Castello</Text>
+            <Text style={styles.text}>{labelLavanderia}</Text>
           </View>
           <View style={styles.iconosLabels}>
             <MaterialCommunityIcons name="truck" size={20} color={"black"} />
-            <Text style={styles.text}>IVECO ML 120E</Text>
+            <Text style={styles.text}>{lavelVehiculo}</Text>
           </View>
         </View>
       </View>

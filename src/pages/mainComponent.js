@@ -9,8 +9,15 @@ export default function MainComponent({ navigation }) {
   const [personas, setPersonas] = useState([]);
   const [vehiculos, setVehiculos] = useState([]);
   const [lavanderiaSelccionada, setLavanderiaSelccionada] = useState([]);
+  const [lavanderiaSeleccionadaLabel, setLavanderiaSeleccionadaLabel] =
+    useState([]);
   const [personaSeleccionada, setPersonaSeleccionada] = useState([]);
+  const [personaSeleccionadaLabel, setPersonaSeleccionadaLabel] = useState([]);
   const [vehiculoSeleccionado, setVehiculoSeleccionado] = useState([]);
+  const [vehiculoSeleccionadoLabel, setVehiculoSeleccionadoLabel] = useState(
+    []
+  );
+
   const [cargando, setCargando] = useState(true); //<-- En casos de poner donut de carga
 
   //DataSource lavanderias (EXTERNALIZARLAS EN UTILS)
@@ -91,7 +98,12 @@ export default function MainComponent({ navigation }) {
             value={lavanderiaSelccionada}
             onChange={(item) => {
               setLavanderiaSelccionada(item.idLavanderia);
-              console.log("Lavandería seleccionada:", item.idLavanderia);
+              setLavanderiaSeleccionadaLabel(item.denominacion);
+              console.log(
+                "Lavandería seleccionada:",
+                item.denominacion,
+                item.idLavanderia
+              );
             }}
           />
         </View>
@@ -109,7 +121,8 @@ export default function MainComponent({ navigation }) {
             value={personaSeleccionada}
             onChange={(item) => {
               setPersonaSeleccionada(item.idPersona);
-              console.log("Persona seleccionada:", item.idPersona);
+              setPersonaSeleccionadaLabel(item.nombre);
+              console.log("Persona seleccionada:", item.nombre, item.idPersona);
             }}
           />
         </View>
@@ -121,13 +134,18 @@ export default function MainComponent({ navigation }) {
             data={vehiculos}
             search
             valueField="idVehiculo"
-            labelField="matricula"
+            labelField="denominacion"
             placeholder="Selecciona un vehículo"
             searchPlaceholder="Buscar..."
             value={vehiculoSeleccionado}
             onChange={(item) => {
               setVehiculoSeleccionado(item.idVehiculo);
-              console.log("Vehículo seleccionado:", item.idVehiculo);
+              setVehiculoSeleccionadoLabel(item.denominacion);
+              console.log(
+                "Vehículo seleccionado:",
+                item.idVehiculo,
+                item.denominacion
+              );
             }}
           />
         </View>
@@ -136,8 +154,11 @@ export default function MainComponent({ navigation }) {
           onPress={() => {
             navigation.navigate("Botones", {
               idLavanderia: lavanderiaSelccionada,
+              labelLavanderia: lavanderiaSeleccionadaLabel,
               idPersona: personaSeleccionada,
+              labelPersona: personaSeleccionadaLabel,
               idVehiculo: vehiculoSeleccionado,
+              lavelVehiculo: vehiculoSeleccionadoLabel,
             });
           }}
         >
