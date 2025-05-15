@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function PantallaLlave({ route }) {
   const [recoger, setRecoger] = useState(false);
   const [dejar, setDejar] = useState(false);
   const [registroRecogida, setRegistroRecogida] = useState([]);
   const [registroDejada, setRegistroDejada] = useState([]);
-  const { idLavanderia } = route.params;
-  const { idPersona } = route.params;
-  const { idVehiculo } = route.params;
+
+  // const { idLavanderia } = route.params;
+  // const { idPersona } = route.params;
+  // const { idVehiculo } = route.params;
 
   const crearRegistroEntrada = () => {
     const nuevoRegistroEntrada = {
@@ -46,37 +48,54 @@ export default function PantallaLlave({ route }) {
         <Text>Vehiculo: IVECO ML 120E</Text>
       </View>
       <View>
-        <View style={styles.botonesComponente}>
-          <Button
-            disabled={dejar}
-            title="Recoger llave"
-            onPress={() => {
-              setRecoger(true);
-              setDejar(true);
-              crearRegistroEntrada();
-              console.log("Recoger Pulsado");
-            }}
-          />
-        </View>
+        <TouchableOpacity
+          style={styles.boton}
+          onPress={() => {
+            setRecoger(true);
+            setDejar(true);
+            crearRegistroEntrada();
+            console.log("Recoger Pulsado");
+          }}
+        >
+          <View style={styles.iconos}>
+            <MaterialCommunityIcons
+              name="key-chain"
+              size={50}
+              color={"white"}
+            />
+            <MaterialCommunityIcons
+              name="arrow-up-bold"
+              size={50}
+              color={"white"}
+            />
+          </View>
+          <Text style={styles.labelBoton}>RECOGER LLAVE</Text>
+        </TouchableOpacity>
       </View>
       <View>
-        <View style={styles.botonesComponente}>
-          <Button
-            disabled={!recoger}
-            title="Dejar llave"
-            onPress={() => {
-              setRecoger(false);
-              setDejar(false);
-              crearRegistroDejada();
-              console.log("Dejar Pulsado");
-            }}
-          />
-        </View>
-        <View>
-          <TouchableOpacity style={styles.boton}>
-            <Text>RECOGER LLAVE</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          style={styles.boton}
+          onPress={() => {
+            setRecoger(false);
+            setDejar(false);
+            crearRegistroDejada();
+            console.log("Dejar Pulsado");
+          }}
+        >
+          <View style={styles.iconos}>
+            <MaterialCommunityIcons
+              name="key-chain"
+              size={50}
+              color={"white"}
+            />
+            <MaterialCommunityIcons
+              name="arrow-down-bold"
+              size={50}
+              color={"white"}
+            />
+          </View>
+          <Text style={styles.labelBoton}>DEJAR LLAVE</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -94,13 +113,22 @@ const styles = StyleSheet.create({
     marginLeft: "10px",
   },
   boton: {
-    backgroundColor: "#eb4034",
-    width: "20%",
-    height: "120px",
-    borderRadius: 5,
-    justifyContent: "center",
+    marginTop: 15,
+    backgroundColor: "#EDB637",
+    width: "90%",
+    height: "150px",
     alignItems: "center",
-    marginBottom: 10,
-    marginLeft: 20,
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 10,
+  },
+  labelBoton: {
+    marginTop: 10,
+    color: "white",
+    fontWeight: "bold",
+  },
+  iconos: {
+    display: "flex",
+    flexDirection: "row",
   },
 });

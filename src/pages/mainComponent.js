@@ -1,8 +1,15 @@
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { useEffect, useState } from "react";
-import { Button } from "react-native-web";
 import { colors } from "../../styles/base";
 import { Dropdown } from "react-native-element-dropdown";
+import logo from "./fotos/logo.png";
 
 export default function MainComponent({ navigation }) {
   const [lavanderias, setLavanderias] = useState([]);
@@ -73,100 +80,105 @@ export default function MainComponent({ navigation }) {
   }, [lavanderiaSelccionada]);
 
   return (
-    <View>
-      <View style={styles.container}>
-        <Text style={styles.label}>Lavandería</Text>
-        <Dropdown
-          style={styles.dropdown}
-          data={lavanderias}
-          search
-          valueField="idLavanderia"
-          labelField="denominacion"
-          placeholder="Selecciona una lavandería"
-          searchPlaceholder="Buscar..."
-          value={lavanderiaSelccionada}
-          onChange={(item) => {
-            setLavanderiaSelccionada(item.idLavanderia);
-            console.log("Lavandería seleccionada:", item.idLavanderia);
-          }}
-        />
+    <View style={styles.mainComponent}>
+      <View>
+        <Image source={logo} resizeMode="cover" style={styles.imagen} />
       </View>
+      <View style={styles.contenedorSelectores}>
+        <View style={styles.contenedorDropdown}>
+          <Text style={styles.labelContenedor}>Lavandería</Text>
+          <Dropdown
+            style={styles.dropdown}
+            data={lavanderias}
+            search
+            valueField="idLavanderia"
+            labelField="denominacion"
+            placeholder="Selecciona una lavandería"
+            searchPlaceholder="Buscar..."
+            value={lavanderiaSelccionada}
+            onChange={(item) => {
+              setLavanderiaSelccionada(item.idLavanderia);
+              console.log("Lavandería seleccionada:", item.idLavanderia);
+            }}
+          />
+        </View>
 
-      <View style={styles.container}>
-        <Text style={styles.label}>Persona</Text>
-        <Dropdown
-          style={styles.dropdown}
-          data={personas}
-          search
-          valueField="idPersona"
-          labelField="nombre"
-          placeholder="Selecciona una persona"
-          searchPlaceholder="Buscar..."
-          value={personaSeleccionada}
-          onChange={(item) => {
-            setPersonaSeleccionada(item.idPersona);
-            console.log("Persona seleccionada:", item.idPersona);
-          }}
-        />
-      </View>
+        <View style={styles.contenedorDropdown}>
+          <Text style={styles.labelContenedor}>Persona</Text>
+          <Dropdown
+            style={styles.dropdown}
+            data={personas}
+            search
+            valueField="idPersona"
+            labelField="nombre"
+            placeholder="Selecciona una persona"
+            searchPlaceholder="Buscar..."
+            value={personaSeleccionada}
+            onChange={(item) => {
+              setPersonaSeleccionada(item.idPersona);
+              console.log("Persona seleccionada:", item.idPersona);
+            }}
+          />
+        </View>
 
-      <View style={styles.container}>
-        <Text style={styles.label}>Vehículo</Text>
-        <Dropdown
-          style={styles.dropdown}
-          data={vehiculos}
-          search
-          valueField="idVehiculo"
-          labelField="matricula"
-          placeholder="Selecciona un vehículo"
-          searchPlaceholder="Buscar..."
-          value={vehiculoSeleccionado}
-          onChange={(item) => {
-            setVehiculoSeleccionado(item.idVehiculo);
-            console.log("Vehículo seleccionado:", item.idVehiculo);
+        <View style={styles.contenedorDropdown}>
+          <Text style={styles.labelContenedor}>Vehículo</Text>
+          <Dropdown
+            style={styles.dropdown}
+            data={vehiculos}
+            search
+            valueField="idVehiculo"
+            labelField="matricula"
+            placeholder="Selecciona un vehículo"
+            searchPlaceholder="Buscar..."
+            value={vehiculoSeleccionado}
+            onChange={(item) => {
+              setVehiculoSeleccionado(item.idVehiculo);
+              console.log("Vehículo seleccionado:", item.idVehiculo);
+            }}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.boton}
+          onPress={() => {
+            navigation.navigate("Botones", {
+              idLavanderia: lavanderiaSelccionada,
+              idPersona: personaSeleccionada,
+              idVehiculo: vehiculoSeleccionado,
+            });
           }}
-        />
+        >
+          <Text style={styles.botonText}>SIGUIENTE</Text>
+        </TouchableOpacity>
       </View>
-      <Button
-        title="Siguiente"
-        onPress={() => {
-          navigation.navigate("Botones", {
-            idLavanderia: lavanderiaSelccionada,
-            idPersona: personaSeleccionada,
-            idVehiculo: vehiculoSeleccionado,
-          });
-        }}
-      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   mainComponent: {
-    justifyContent: "center",
-    marginLeft: "21%",
-    marginTop: "10%",
-    width: "200px",
-    color: colors.lightBlack,
-  },
-  options: {
-    marginBottom: "10px",
-  },
-  container: {
     backgroundColor: "white",
+    height: "100%",
+  },
+  contenedorSelectores: {
+    justifyContent: "center",
+    alignSelf: "center",
+    marginTop: "10%",
+    color: colors.lightBlack,
+    width: "320px",
+    backgroundColor: "white",
+  },
+  imagen: {
+    width: "95%",
+    alignSelf: "center",
+    height: 125,
+    marginTop: 20,
+  },
+  contenedorDropdown: {
     padding: 16,
+    backgroundColor: "white",
   },
-  dropdown: {
-    height: 50,
-    borderColor: "gray",
-    borderWidth: 0.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  label: {
+  labelContenedor: {
     position: "absolute",
     backgroundColor: "white",
     left: 22,
@@ -175,18 +187,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     fontSize: 14,
   },
-  placeholderStyle: {
-    fontSize: 16,
+  dropdown: {
+    height: 50,
+    borderColor: "#EDB637",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
   },
-  selectedTextStyle: {
-    fontSize: 16,
-  },
-  iconStyle: {
-    width: 20,
-    height: 20,
-  },
-  inputSearchStyle: {
+  boton: {
+    marginTop: 15,
+    backgroundColor: "#EDB637",
+    width: 180,
     height: 40,
-    fontSize: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 10,
+  },
+  botonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
