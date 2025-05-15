@@ -7,8 +7,7 @@ import icono from "./fotos/icono.png";
 export default function PantallaLlave({ route }) {
   const [recoger, setRecoger] = useState(false);
   const [dejar, setDejar] = useState(false);
-  const [registroRecogida, setRegistroRecogida] = useState([]);
-  const [registroDejada, setRegistroDejada] = useState([]);
+
   const [posTaquilla, setPosTaquilla] = useState([]);
   const date = new Date();
 
@@ -128,11 +127,12 @@ export default function PantallaLlave({ route }) {
       </View>
       <View>
         <TouchableOpacity
+          disabled={dejar}
           style={styles.boton}
           onPress={() => {
             setRecoger(true);
             setDejar(true);
-            postMovimientoRecogida();
+            // postMovimientoRecogida(); <------------------------------------------
           }}
         >
           <View style={styles.iconos}>
@@ -152,12 +152,12 @@ export default function PantallaLlave({ route }) {
       </View>
       <View>
         <TouchableOpacity
+          disabled={!dejar}
           style={styles.boton}
           onPress={() => {
             setRecoger(false);
             setDejar(false);
-            postMovimientoDejar();
-            console.log("Dejar Pulsado");
+            // postMovimientoDejar(); <------------------------------------------
           }}
         >
           <View style={styles.iconos}>
