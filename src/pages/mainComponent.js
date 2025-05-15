@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import { colors } from "../../styles/base";
 import { Dropdown } from "react-native-element-dropdown";

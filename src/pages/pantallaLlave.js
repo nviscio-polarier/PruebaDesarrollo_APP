@@ -12,9 +12,9 @@ export default function PantallaLlave({ route }) {
 
   const [posTaquilla, setPosTaquilla] = useState([]);
 
-  // const { idLavanderia } = route.params;
-  // const { idPersona } = route.params;
-  // const { idVehiculo } = route.params;
+  const { idLavanderia } = route.params;
+  const { idPersona } = route.params;
+  const { idVehiculo } = route.params;
 
   const crearRegistroEntrada = () => {
     const nuevoRegistroEntrada = {
@@ -66,7 +66,6 @@ export default function PantallaLlave({ route }) {
         </View>
       </View>
       <View style={styles.contenedorDropdown}>
-        <Text style={styles.labelContenedor}>Taquilla</Text>
         <Dropdown
           style={styles.dropdown}
           data={posTaquilla}
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
   },
   labels: {
     marginTop: "10px",
-    marginBottom: "10px",
+    marginBottom: 20,
     marginLeft: "20px",
     marginRight: "20px",
     borderWidth: 2,
@@ -205,15 +204,6 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     backgroundColor: "white",
     marginBottom: -15,
-  },
-  labelContenedor: {
-    position: "absolute",
-    backgroundColor: "white",
-    left: 22,
-    top: 8,
-    zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
   },
   dropdown: {
     height: 40,

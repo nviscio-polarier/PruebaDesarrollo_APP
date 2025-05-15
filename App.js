@@ -13,9 +13,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           {/* CAMBIAR ORDEN */}
-          <Stack.Screen name="Botones" component={PantallaLlave} />
-
           <Stack.Screen name="Selector" component={MainComponent} />
+          <Stack.Screen name="Botones" component={PantallaLlave} />
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
