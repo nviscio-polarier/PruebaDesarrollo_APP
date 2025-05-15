@@ -10,6 +10,12 @@ export default function PantallaLlave({ route }) {
   const [registroRecogida, setRegistroRecogida] = useState([]);
   const [registroDejada, setRegistroDejada] = useState([]);
   const [posTaquilla, setPosTaquilla] = useState([]);
+  const date = new Date();
+
+  //Guarrada a cambiar
+  const formatDate = (date) => {
+    return date.toISOString().split("T")[0];
+  };
 
   //Parametros que llegan de la otra pantalla
   const { idLavanderia } = route.params;
@@ -19,32 +25,70 @@ export default function PantallaLlave({ route }) {
   const { idVehiculo } = route.params;
   const { lavelVehiculo } = route.params;
 
-  const crearRegistroEntrada = () => {
-    const nuevoRegistroEntrada = {
-      idTquilla: 1,
-      idVehiculo: idVehiculo,
-      idPersona: idPersona,
-      fechaRecogida: new Date(),
-    };
+  //Crea registro de recogida de llave ( EXTERNALIZAR )
+  const postMovimientoRecogida = async () => {
+    const fechaFormateada = formatDate(date);
 
-    setRegistroRecogida(nuevoRegistroEntrada);
-    console.log("Registro de recogida realizado:", nuevoRegistroEntrada);
+    try {
+      const response = await fetch(
+        `https://localhost:7136/odata/postMovimientoTaquilla`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idTaquilla: 13,
+            idVehiculo: idVehiculo,
+            idPersona: idPersona,
+            fechaRecogida: fechaFormateada,
+            fechaDejar: null,
+            posicion: 4,
+          }),
+        }
+      );
 
-    //LOGICA POST
+      if (!response.ok) {
+        throw new Error("Error al crear movimiento de recogida");
+      }
+
+      console.log("Movimiento recogida creado correctamente");
+    } catch (error) {
+      console.error("Error al crear movimiento de recogida:", error);
+    }
   };
 
-  const crearRegistroDejada = () => {
-    const nuevoRegistroDejada = {
-      idTquilla: 1,
-      idVehiculo: idVehiculo,
-      idPersona: idPersona,
-      fechaDejada: new Date(),
-    };
+  //Crea registro de recogida de llave ( EXTERNALIZAR )
+  const postMovimientoDejar = async () => {
+    const fechaFormateada = formatDate(date);
 
-    setRegistroDejada(nuevoRegistroDejada);
-    console.log("Registro de dejada realizado:", nuevoRegistroDejada);
+    try {
+      const response = await fetch(
+        `https://localhost:7136/odata/postMovimientoTaquilla`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idTaquilla: 13,
+            idVehiculo: idVehiculo,
+            idPersona: idPersona,
+            fechaRecogida: null,
+            fechaDejar: fechaFormateada,
+            posicion: 4,
+          }),
+        }
+      );
 
-    //LOGICA POST
+      if (!response.ok) {
+        throw new Error("Error al crear movimiento de dejar");
+      }
+
+      console.log("Movimiento dejar creado correctamente");
+    } catch (error) {
+      console.error("Error al crear movimiento de dejar:", error);
+    }
   };
 
   return (
@@ -88,8 +132,7 @@ export default function PantallaLlave({ route }) {
           onPress={() => {
             setRecoger(true);
             setDejar(true);
-            crearRegistroEntrada();
-            console.log("Recoger Pulsado");
+            postMovimientoRecogida();
           }}
         >
           <View style={styles.iconos}>
@@ -113,7 +156,7 @@ export default function PantallaLlave({ route }) {
           onPress={() => {
             setRecoger(false);
             setDejar(false);
-            crearRegistroDejada();
+            postMovimientoDejar();
             console.log("Dejar Pulsado");
           }}
         >
