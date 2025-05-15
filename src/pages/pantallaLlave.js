@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Dropdown } from "react-native-element-dropdown";
+import icono from "./fotos/icono.png";
 
 export default function PantallaLlave({ route }) {
   const [recoger, setRecoger] = useState(false);
   const [dejar, setDejar] = useState(false);
   const [registroRecogida, setRegistroRecogida] = useState([]);
   const [registroDejada, setRegistroDejada] = useState([]);
+
+  const [posTaquilla, setPosTaquilla] = useState([]);
 
   // const { idLavanderia } = route.params;
   // const { idPersona } = route.params;
@@ -41,11 +45,40 @@ export default function PantallaLlave({ route }) {
   };
 
   return (
-    <View>
+    <View style={styles.mainComponent}>
       <View style={styles.labels}>
-        <Text>Nombre: Nico Viscio</Text>
-        <Text>Lavanderia: Son Castello</Text>
-        <Text>Vehiculo: IVECO ML 120E</Text>
+        <View style={styles.imageContainer}>
+          <Image source={icono} resizeMode="cover" style={styles.image} />
+        </View>
+        <View style={styles.contenedorLabels}>
+          <View style={styles.iconosLabels}>
+            <MaterialCommunityIcons name="account" size={20} color={"black"} />
+            <Text style={styles.text}>Nico Viscio</Text>
+          </View>
+          <View style={styles.iconosLabels}>
+            <MaterialCommunityIcons name="factory" size={20} color={"black"} />
+            <Text style={styles.text}>Son Castello</Text>
+          </View>
+          <View style={styles.iconosLabels}>
+            <MaterialCommunityIcons name="truck" size={20} color={"black"} />
+            <Text style={styles.text}>IVECO ML 120E</Text>
+          </View>
+        </View>
+      </View>
+      <View style={styles.contenedorDropdown}>
+        <Text style={styles.labelContenedor}>Taquilla</Text>
+        <Dropdown
+          style={styles.dropdown}
+          data={posTaquilla}
+          valueField="posicion"
+          labelField="posicion"
+          placeholder="Num. taquilla"
+          // value={personaSeleccionada}
+          // onChange={(item) => {
+          //   setPersonaSeleccionada(item.idPersona);
+          //   console.log("Persona seleccionada:", item.idPersona);
+          // }}
+        />
       </View>
       <View>
         <TouchableOpacity
@@ -102,6 +135,10 @@ export default function PantallaLlave({ route }) {
 }
 
 const styles = StyleSheet.create({
+  mainComponent: {
+    backgroundColor: "white",
+    height: "100%",
+  },
   botonesComponente: {
     marginTop: "10px",
     width: "200px",
@@ -109,13 +146,20 @@ const styles = StyleSheet.create({
   },
   labels: {
     marginTop: "10px",
-    marginBottom: "50px",
-    marginLeft: "10px",
+    marginBottom: "10px",
+    marginLeft: "20px",
+    marginRight: "20px",
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "#EDB637",
+    padding: 10,
+    display: "flex",
+    flexDirection: "row",
   },
   boton: {
-    marginTop: 15,
+    marginTop: 10,
     backgroundColor: "#EDB637",
-    width: "90%",
+    width: "89%",
     height: "150px",
     alignItems: "center",
     justifyContent: "center",
@@ -130,5 +174,53 @@ const styles = StyleSheet.create({
   iconos: {
     display: "flex",
     flexDirection: "row",
+  },
+  iconosLabels: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  contenedorLabels: {
+    marginLeft: 10,
+    marginTop: 3,
+  },
+  text: {
+    marginLeft: 5,
+  },
+  image: {
+    width: 40,
+    height: 40,
+    alignSelf: "center",
+  },
+  imageContainer: {
+    width: 70,
+    height: 70,
+    borderRadius: "50%",
+    borderWidth: 2,
+    borderColor: "#EDB637",
+    alignContent: "center",
+    justifyContent: "center",
+  },
+  contenedorDropdown: {
+    padding: 16,
+    marginLeft: 5,
+    backgroundColor: "white",
+    marginBottom: -15,
+  },
+  labelContenedor: {
+    position: "absolute",
+    backgroundColor: "white",
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  dropdown: {
+    height: 40,
+    width: "50%",
+    borderColor: "#EDB637",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
   },
 });
