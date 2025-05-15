@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function PantallaLlave({ route }) {
   const [recoger, setRecoger] = useState(false);
@@ -72,6 +72,11 @@ export default function PantallaLlave({ route }) {
             }}
           />
         </View>
+        <View>
+          <TouchableOpacity style={styles.boton}>
+            <Text>RECOGER LLAVE</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -87,5 +92,15 @@ const styles = StyleSheet.create({
     marginTop: "10px",
     marginBottom: "50px",
     marginLeft: "10px",
+  },
+  boton: {
+    backgroundColor: "#eb4034",
+    width: "20%",
+    height: "120px",
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+    marginLeft: 20,
   },
 });

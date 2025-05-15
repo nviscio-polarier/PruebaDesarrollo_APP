@@ -2,6 +2,7 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { Button } from "react-native-web";
 import { colors } from "../../styles/base";
+import { Dropdown } from "react-native-element-dropdown";
 
 export default function MainComponent({ navigation }) {
   const [lavanderias, setLavanderias] = useState([]);
@@ -10,7 +11,7 @@ export default function MainComponent({ navigation }) {
   const [lavanderiaSelccionada, setLavanderiaSelccionada] = useState([]);
   const [personaSeleccionada, setPersonaSeleccionada] = useState([]);
   const [vehiculoSeleccionado, setVehiculoSeleccionado] = useState([]);
-  const [cargando, setCargando] = useState(true);
+  const [cargando, setCargando] = useState(true); //<-- En casos de poner donut de carga
 
   //DataSource lavanderias (EXTERNALIZARLAS EN UTILS)
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function MainComponent({ navigation }) {
     dataSourceGetLavanderias();
   }, []);
 
+  //DataSource Personas de lavanderia seleccionada
   const dataSourceGetPersonasLavanderia = async () => {
     try {
       const response = await fetch(
@@ -39,7 +41,7 @@ export default function MainComponent({ navigation }) {
       );
       const data = await response.json();
       setPersonas(data);
-      console.log("DATAAAAA:", data);
+      console.log("Data Personas:", data);
     } catch (error) {
       console.log("ERROR API PERSONAS");
     } finally {
@@ -47,89 +49,83 @@ export default function MainComponent({ navigation }) {
     }
   };
 
+  //DataSource Vehiculos de lavanderia seleccionada
+  const dataSourceGetVehiculoLavanderia = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7136/odata/getVehiculoLavanderia?idLavanderia=${lavanderiaSelccionada}`
+      );
+      const data = await response.json();
+      setVehiculos(data);
+      console.log("Data Vehiculos:", data);
+    } catch (error) {
+      console.log("ERROR API PERSONAS");
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  //UseEffect para actualizar la informacion recivida
+
   useEffect(() => {
     dataSourceGetPersonasLavanderia();
+    dataSourceGetVehiculoLavanderia();
   }, [lavanderiaSelccionada]);
 
-  useEffect(() => {
-    const dataSourceGetVehiculos = async (lavanderiaSelccionada) => {
-      try {
-        const response = await fetch(
-          `https://localhost:7136/odata/getVehiculoLavanderia?idLavanderia=${lavanderiaSelccionada}`
-        );
-        const data = await response.json();
-
-        if (!data || data.lenght == 0) {
-          console.log("Array de vehiculos vacio:");
-        } else {
-          setVehiculos(data);
-          console.log("Vehiculos recibidos:", data);
-        }
-      } catch (error) {
-        console.log("ERROR API VEHICULOS");
-        return;
-      } finally {
-        setCargando(false);
-      }
-    };
-    dataSourceGetVehiculos();
-  }, []);
-
-  //Recoge la información de las options seleccionadas
-
-  const getLavanderia = () => {
-    const selectLavanderia = document.getElementById("lavanderias");
-    const id = selectLavanderia.value;
-    setLavanderiaSelccionada(id);
-    console.log(id);
-  };
-
-  const getPersona = () => {
-    const selectPersona = document.getElementById("personas");
-    const id = selectPersona.value;
-    setPersonaSeleccionada(id);
-    console.log(id);
-  };
-
-  const getVehiculo = () => {
-    const selectVehiculo = document.getElementById("vehiculos");
-    const id = selectVehiculo.value;
-    setVehiculoSeleccionado(id);
-    console.log(id);
-  };
-
   return (
-    <View style={styles.mainComponent}>
-      <View>
-        <select
-          id="lavanderias"
-          onChange={getLavanderia}
-          style={styles.options}
-        >
-          {lavanderias.map((l) => (
-            <option key={l.idLavanderia} value={l.idLavanderia}>
-              {l.denominacion}
-            </option>
-          ))}
-        </select>
+    <View>
+      <View style={styles.container}>
+        <Text style={styles.label}>Lavandería</Text>
+        <Dropdown
+          style={styles.dropdown}
+          data={lavanderias}
+          search
+          valueField="idLavanderia"
+          labelField="denominacion"
+          placeholder="Selecciona una lavandería"
+          searchPlaceholder="Buscar..."
+          value={lavanderiaSelccionada}
+          onChange={(item) => {
+            setLavanderiaSelccionada(item.idLavanderia);
+            console.log("Lavandería seleccionada:", item.idLavanderia);
+          }}
+        />
       </View>
-      <View>
-        <select id="personas" onChange={getPersona} style={styles.options}>
-          {personas.map((p) => (
-            <option key={p.idPersona} value={p.idPersona}>
-              {p.nombre}
-            </option>
-          ))}
-        </select>
+
+      <View style={styles.container}>
+        <Text style={styles.label}>Persona</Text>
+        <Dropdown
+          style={styles.dropdown}
+          data={personas}
+          search
+          valueField="idPersona"
+          labelField="nombre"
+          placeholder="Selecciona una persona"
+          searchPlaceholder="Buscar..."
+          value={personaSeleccionada}
+          onChange={(item) => {
+            setPersonaSeleccionada(item.idPersona);
+            console.log("Persona seleccionada:", item.idPersona);
+          }}
+        />
       </View>
-      <View>
-        <select id="vehiculos" onChange={getVehiculo} style={styles.options}>
-          {vehiculos.map((v) => (
-            <option key={v.idVehiculo} value={v.idVehiculo}>
-              {v.matricula}
-            </option>
-          ))}
-        </select>
+
+      <View style={styles.container}>
+        <Text style={styles.label}>Vehículo</Text>
+        <Dropdown
+          style={styles.dropdown}
+          data={vehiculos}
+          search
+          valueField="idVehiculo"
+          labelField="matricula"
+          placeholder="Selecciona un vehículo"
+          searchPlaceholder="Buscar..."
+          value={vehiculoSeleccionado}
+          onChange={(item) => {
+            setVehiculoSeleccionado(item.idVehiculo);
+            console.log("Vehículo seleccionado:", item.idVehiculo);
+          }}
+        />
       </View>
       <Button
         title="Siguiente"
@@ -155,5 +151,42 @@ const styles = StyleSheet.create({
   },
   options: {
     marginBottom: "10px",
+  },
+  container: {
+    backgroundColor: "white",
+    padding: 16,
+  },
+  dropdown: {
+    height: 50,
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: "absolute",
+    backgroundColor: "white",
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });
