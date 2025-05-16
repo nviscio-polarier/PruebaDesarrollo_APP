@@ -9,7 +9,23 @@ export default function PantallaLlave({ route }) {
   const [dejar, setDejar] = useState(false);
   const [taquillaLavanderia, setTaquillaLavanderia] = useState([]);
   const [estadoTaquilla, setEstadoTaquilla] = useState([]);
-  const [datosDropdown, setDatosDropdown] = useState([]);
+
+  const datosDropdown = [
+    { posicion: "1", value: 1 },
+    { posicion: "2", value: 2 },
+    { posicion: "3", value: 3 },
+    { posicion: "4", value: 4 },
+    { posicion: "5", value: 5 },
+    { posicion: "6", value: 6 },
+    { posicion: "7", value: 7 },
+    { posicion: "8", value: 8 },
+    { posicion: "9", value: 9 },
+    { posicion: "10", value: 10 },
+    { posicion: "11", value: 11 },
+    { posicion: "12", value: 12 },
+    { posicion: "13", value: 13 },
+    { posicion: "14", value: 14 },
+  ];
 
   const [posicionSeleccionada, setPosicionSeleccionada] = useState([]);
 
@@ -81,7 +97,7 @@ export default function PantallaLlave({ route }) {
             idPersona: idPersona,
             fechaRecogida: fechaFormateada,
             fechaDejar: null,
-            posicion: 4,
+            posicion: posicionSeleccionada,
           }),
         }
       );
@@ -115,7 +131,7 @@ export default function PantallaLlave({ route }) {
             idPersona: idPersona,
             fechaRecogida: null,
             fechaDejar: fechaFormateada,
-            posicion: 4,
+            posicion: posicionSeleccionada,
           }),
         }
       );
@@ -143,7 +159,7 @@ export default function PantallaLlave({ route }) {
           },
           body: JSON.stringify({
             idTaquilla: 13,
-            posicion: 1,
+            posicion: posicionSeleccionada,
             disponible: estado,
           }),
         }
@@ -185,11 +201,12 @@ export default function PantallaLlave({ route }) {
           style={styles.dropdown}
           data={datosDropdown}
           valueField="value"
-          labelField="label"
+          labelField="posicion"
           placeholder="Num. taquilla"
+          value={posicionSeleccionada}
           onChange={(item) => {
             setPosicionSeleccionada(item.value);
-            console.log("Seleccionado:", item);
+            console.log("Seleccionado:", item.value);
           }}
         />
       </View>
