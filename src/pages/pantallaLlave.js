@@ -34,6 +34,7 @@ export default function PantallaLlave({ route }) {
     { posicion: "14", value: 14 },
   ];
 
+  //Variable para estado de boton
   const deshabilitado =
     !posicionSeleccionada || posicionSeleccionada.length === 0;
 
