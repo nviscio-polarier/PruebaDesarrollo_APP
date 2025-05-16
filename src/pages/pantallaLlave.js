@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Dropdown } from "react-native-element-dropdown";
@@ -7,8 +7,12 @@ import icono from "./fotos/icono.png";
 export default function PantallaLlave({ route }) {
   const [recoger, setRecoger] = useState(false);
   const [dejar, setDejar] = useState(false);
+  const [taquillaLavanderia, setTaquillaLavanderia] = useState([]);
+  const [estadoTaquilla, setEstadoTaquilla] = useState([]);
+  const [datosDropdown, setDatosDropdown] = useState([]);
+  const [posicionSeleccionada, setPosicionSeleccionada] = useState([]);
 
-  const [posTaquilla, setPosTaquilla] = useState([]);
+  const [estado, setEstado] = useState(false);
   const date = new Date();
 
   //Guarrada a cambiar
@@ -23,6 +27,40 @@ export default function PantallaLlave({ route }) {
   const { labelPersona } = route.params;
   const { idVehiculo } = route.params;
   const { lavelVehiculo } = route.params;
+
+  //Recoge las taquillas asignadas a la lavanderia seleccionada.
+  useEffect(() => {
+    const dataSourceGetTaquillasLavanderia = async () => {
+      try {
+        const response = await fetch(
+          `https://localhost:7136/odata/getTaquillasLavanderia?idLavanderia=${idLavanderia}`
+        );
+        const data = await response.json();
+        setTaquillaLavanderia(data);
+        console.log("Data taquillas:", data);
+      } catch (error) {
+        console.log("ERROR API TAQUILLAS");
+      }
+    };
+    dataSourceGetTaquillasLavanderia();
+  }, []);
+
+  //Recoge los estados de las posiciones de las taquillas
+  useEffect(() => {
+    const dataSourceGetEstadoTaquillas = async () => {
+      try {
+        const response = await fetch(
+          `https://localhost:7136/odata/getRegistros`
+        );
+        const data = await response.json();
+        setEstadoTaquilla(data);
+        console.log("Datos estado Taquilla:", data);
+      } catch (error) {
+        console.log("ERROR API ESTADOS TAQUILLAS");
+      }
+    };
+    dataSourceGetEstadoTaquillas();
+  }, []);
 
   //Crea registro de recogida de llave ( EXTERNALIZAR )
   const postMovimientoRecogida = async () => {
@@ -50,7 +88,8 @@ export default function PantallaLlave({ route }) {
       if (!response.ok) {
         throw new Error("Error al crear movimiento de recogida");
       }
-
+      setEstado(true);
+      postEstadoTaquilla();
       console.log("Movimiento recogida creado correctamente");
     } catch (error) {
       console.error("Error al crear movimiento de recogida:", error);
@@ -71,7 +110,6 @@ export default function PantallaLlave({ route }) {
           },
           body: JSON.stringify({
             idTaquilla: 13,
-            idVehiculo: idVehiculo,
             idPersona: idPersona,
             fechaRecogida: null,
             fechaDejar: fechaFormateada,
@@ -83,12 +121,68 @@ export default function PantallaLlave({ route }) {
       if (!response.ok) {
         throw new Error("Error al crear movimiento de dejar");
       }
-
+      setEstado(false);
+      postEstadoTaquilla();
       console.log("Movimiento dejar creado correctamente");
     } catch (error) {
       console.error("Error al crear movimiento de dejar:", error);
     }
   };
+
+  //Actualiza el estado de la posicion de la taquilla seleccionada
+  const postEstadoTaquilla = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7136/odata/postEstadoTaquilla`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idTaquilla: 13,
+            posicion: 1,
+            disponible: estado,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al crear estado de coger llave");
+      }
+
+      console.log("Estado recoger llave creado correctamente");
+    } catch (error) {
+      console.error("Error al crear estado recoger llave:", error);
+    }
+  };
+
+  // useEffect(() => {
+  //   const taquilla = taquillaLavanderia[0];
+  //   const { idTaquilla, tamano } = taquilla;
+
+  //   // Agrupar últimos estados por posición
+  //   const ultimosEstados = {};
+  //   estadoTaquilla.forEach((estado) => {
+  //     if (estado.idTaquilla === idTaquilla) {
+  //       ultimosEstados[estado.posicion] = estado;
+  //     }
+  //   });
+
+  //   // Generar las opciones de 1 a tamano
+  //   const opciones = [];
+  //   for (let i = 1; i <= tamano; i++) {
+  //     const estado = ultimosEstados[i];
+  //     if (!estado || estado.disponible === 1) {
+  //       opciones.push({
+  //         label: `Posición ${i}`,
+  //         value: i,
+  //       });
+  //     }
+  //   }
+
+  //   setDatosDropdown(opciones);
+  // }, []);
 
   return (
     <View style={styles.mainComponent}>
@@ -114,11 +208,14 @@ export default function PantallaLlave({ route }) {
       <View style={styles.contenedorDropdown}>
         <Dropdown
           style={styles.dropdown}
-          data={posTaquilla}
-          valueField="posicion"
-          labelField="posicion"
+          data={datosDropdown}
+          valueField="value"
+          labelField="label"
           placeholder="Num. taquilla"
-          // value={personaSeleccionada}
+          onChange={(item) => {
+            setPosicionSeleccionada(item.value);
+            console.log("Seleccionado:", item);
+          }}
           // onChange={(item) => {
           //   setPersonaSeleccionada(item.idPersona);
           //   console.log("Persona seleccionada:", item.idPersona);
@@ -128,11 +225,11 @@ export default function PantallaLlave({ route }) {
       <View>
         <TouchableOpacity
           disabled={dejar}
-          style={styles.boton}
+          style={[styles.boton, dejar && styles.botonDisabled]}
           onPress={() => {
             setRecoger(true);
             setDejar(true);
-            // postMovimientoRecogida(); <------------------------------------------
+            // postMovimientoRecogida();
           }}
         >
           <View style={styles.iconos}>
@@ -153,11 +250,11 @@ export default function PantallaLlave({ route }) {
       <View>
         <TouchableOpacity
           disabled={!dejar}
-          style={styles.boton}
+          style={[styles.boton, !dejar && styles.botonDisabled]}
           onPress={() => {
             setRecoger(false);
             setDejar(false);
-            // postMovimientoDejar(); <------------------------------------------
+            // postMovimientoDejar();
           }}
         >
           <View style={styles.iconos}>
@@ -204,6 +301,16 @@ const styles = StyleSheet.create({
   boton: {
     marginTop: 10,
     backgroundColor: "#EDB637",
+    width: "89%",
+    height: "150px",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 10,
+  },
+  botonDisabled: {
+    marginTop: 10,
+    backgroundColor: "rgb(129,129,129)",
     width: "89%",
     height: "150px",
     alignItems: "center",
