@@ -162,4 +162,12 @@ export const PantallaRecogida = {
     borderRadius: 8,
     paddingHorizontal: 8,
   },
+  dropdownDisabled: {
+    height: 40,
+    width: "50%",
+    borderColor: colors.darkGray,
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
 };

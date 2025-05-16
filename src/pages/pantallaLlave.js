@@ -34,6 +34,9 @@ export default function PantallaLlave({ route }) {
     { posicion: "14", value: 14 },
   ];
 
+  const deshabilitado =
+    !posicionSeleccionada || posicionSeleccionada.length === 0;
+
   //Guarrada a cambiar
   const formatDate = (date) => {
     return date.toISOString().split("T")[0];
@@ -192,7 +195,11 @@ export default function PantallaLlave({ route }) {
       </View>
       <View style={PantallaRecogida.contenedorDropdown}>
         <Dropdown
-          style={PantallaRecogida.dropdown}
+          disable={dejar}
+          style={[
+            PantallaRecogida.dropdown,
+            dejar && PantallaRecogida.dropdownDisabled,
+          ]}
           data={datosDropdown}
           valueField="value"
           labelField="posicion"
@@ -206,10 +213,10 @@ export default function PantallaLlave({ route }) {
       </View>
       <View>
         <TouchableOpacity
-          disabled={dejar}
+          disabled={dejar || deshabilitado}
           style={[
             PantallaRecogida.boton,
-            dejar && PantallaRecogida.botonDisabled,
+            dejar || (deshabilitado && PantallaRecogida.botonDisabled),
           ]}
           onPress={() => {
             setRecoger(true);
