@@ -21,6 +21,11 @@ export default function MainComponent({ navigation }) {
 
   const [cargando, setCargando] = useState(true); //<-- En casos de poner donut de carga
 
+  const deshabilitado =
+    lavanderiaSelccionada.length <= 0 ||
+    vehiculoSeleccionado.length <= 0 ||
+    personaSeleccionada.length <= 0;
+
   //DATASOURCES ( EXTERNALIZAR ) ----------------------------------------------------------------------------
 
   //DataSource lavanderias
@@ -156,7 +161,11 @@ export default function MainComponent({ navigation }) {
           />
         </View>
         <TouchableOpacity
-          style={PantallaLogin.boton}
+          disabled={deshabilitado}
+          style={[
+            PantallaLogin.boton,
+            deshabilitado && PantallaLogin.botonDisabled,
+          ]}
           onPress={() => {
             navigation.navigate("Botones", {
               idLavanderia: lavanderiaSelccionada,
