@@ -39,6 +39,13 @@ export const PantallaLogin = {
     borderRadius: 8,
     paddingHorizontal: 8,
   },
+  dropdownDisabled: {
+    height: 50,
+    borderColor: colors.darkGray,
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
   boton: {
     marginTop: 15,
     backgroundColor: colors.primary,

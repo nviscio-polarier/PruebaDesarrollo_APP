@@ -122,7 +122,12 @@ export default function MainComponent({ navigation }) {
         <View style={PantallaLogin.contenedorDropdown}>
           <Text style={PantallaLogin.labelContenedor}>Persona</Text>
           <Dropdown
-            style={PantallaLogin.dropdown}
+            disable={lavanderiaSelccionada.length <= 0}
+            style={[
+              PantallaLogin.dropdown,
+              lavanderiaSelccionada.length <= 0 &&
+                PantallaLogin.dropdownDisabled,
+            ]}
             data={personas}
             search
             valueField="idPersona"
@@ -141,7 +146,12 @@ export default function MainComponent({ navigation }) {
         <View style={PantallaLogin.contenedorDropdown}>
           <Text style={PantallaLogin.labelContenedor}>Vehículo</Text>
           <Dropdown
-            style={PantallaLogin.dropdown}
+            disable={lavanderiaSelccionada.length <= 0}
+            style={[
+              PantallaLogin.dropdown,
+              lavanderiaSelccionada.length <= 0 &&
+                PantallaLogin.dropdownDisabled,
+            ]}
             data={vehiculos}
             search
             valueField="idVehiculo"
