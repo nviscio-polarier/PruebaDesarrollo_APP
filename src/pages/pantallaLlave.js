@@ -157,11 +157,12 @@ export default function PantallaLlave({ route }) {
     }
   };
 
-  // useEffect(() => {
+  //   useEffect(() => {
+  //   if (taquillaLavanderia.length === 0 || estadoTaquilla.length === 0) return;
+
   //   const taquilla = taquillaLavanderia[0];
   //   const { idTaquilla, tamano } = taquilla;
 
-  //   // Agrupar últimos estados por posición
   //   const ultimosEstados = {};
   //   estadoTaquilla.forEach((estado) => {
   //     if (estado.idTaquilla === idTaquilla) {
@@ -169,7 +170,6 @@ export default function PantallaLlave({ route }) {
   //     }
   //   });
 
-  //   // Generar las opciones de 1 a tamano
   //   const opciones = [];
   //   for (let i = 1; i <= tamano; i++) {
   //     const estado = ultimosEstados[i];
@@ -182,7 +182,7 @@ export default function PantallaLlave({ route }) {
   //   }
 
   //   setDatosDropdown(opciones);
-  // }, []);
+  // }, [taquillaLavanderia, estadoTaquilla]);
 
   return (
     <View style={styles.mainComponent}>
