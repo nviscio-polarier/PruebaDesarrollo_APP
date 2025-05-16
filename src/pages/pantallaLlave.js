@@ -10,6 +10,7 @@ export default function PantallaLlave({ route }) {
   const [taquillaLavanderia, setTaquillaLavanderia] = useState([]);
   const [estadoTaquilla, setEstadoTaquilla] = useState([]);
   const [datosDropdown, setDatosDropdown] = useState([]);
+
   const [posicionSeleccionada, setPosicionSeleccionada] = useState([]);
 
   const [estado, setEstado] = useState(false);
@@ -110,6 +111,7 @@ export default function PantallaLlave({ route }) {
           },
           body: JSON.stringify({
             idTaquilla: 13,
+            idVehiculo: idVehiculo,
             idPersona: idPersona,
             fechaRecogida: null,
             fechaDejar: fechaFormateada,
@@ -157,33 +159,6 @@ export default function PantallaLlave({ route }) {
     }
   };
 
-  //   useEffect(() => {
-  //   if (taquillaLavanderia.length === 0 || estadoTaquilla.length === 0) return;
-
-  //   const taquilla = taquillaLavanderia[0];
-  //   const { idTaquilla, tamano } = taquilla;
-
-  //   const ultimosEstados = {};
-  //   estadoTaquilla.forEach((estado) => {
-  //     if (estado.idTaquilla === idTaquilla) {
-  //       ultimosEstados[estado.posicion] = estado;
-  //     }
-  //   });
-
-  //   const opciones = [];
-  //   for (let i = 1; i <= tamano; i++) {
-  //     const estado = ultimosEstados[i];
-  //     if (!estado || estado.disponible === 1) {
-  //       opciones.push({
-  //         label: `Posición ${i}`,
-  //         value: i,
-  //       });
-  //     }
-  //   }
-
-  //   setDatosDropdown(opciones);
-  // }, [taquillaLavanderia, estadoTaquilla]);
-
   return (
     <View style={styles.mainComponent}>
       <View style={styles.labels}>
@@ -216,10 +191,6 @@ export default function PantallaLlave({ route }) {
             setPosicionSeleccionada(item.value);
             console.log("Seleccionado:", item);
           }}
-          // onChange={(item) => {
-          //   setPersonaSeleccionada(item.idPersona);
-          //   console.log("Persona seleccionada:", item.idPersona);
-          // }}
         />
       </View>
       <View>
@@ -229,7 +200,7 @@ export default function PantallaLlave({ route }) {
           onPress={() => {
             setRecoger(true);
             setDejar(true);
-            // postMovimientoRecogida();
+            postMovimientoRecogida();
           }}
         >
           <View style={styles.iconos}>
@@ -254,7 +225,7 @@ export default function PantallaLlave({ route }) {
           onPress={() => {
             setRecoger(false);
             setDejar(false);
-            // postMovimientoDejar();
+            postMovimientoDejar();
           }}
         >
           <View style={styles.iconos}>
