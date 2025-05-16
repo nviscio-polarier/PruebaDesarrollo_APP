@@ -217,7 +217,7 @@ export default function PantallaLlave({ route }) {
           disabled={dejar || deshabilitado}
           style={[
             PantallaRecogida.boton,
-            dejar || (deshabilitado && PantallaRecogida.botonDisabled),
+            dejar && !deshabilitado && PantallaRecogida.botonDisabled,
           ]}
           onPress={() => {
             setRecoger(true);
