@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
-import { colors } from "../../styles/base";
 import { Dropdown } from "react-native-element-dropdown";
 import logo from "./fotos/logo.png";
+import { PantallaLogin } from "./styles";
 
 export default function MainComponent({ navigation }) {
+  //Hooks
   const [lavanderias, setLavanderias] = useState([]);
   const [personas, setPersonas] = useState([]);
   const [vehiculos, setVehiculos] = useState([]);
@@ -20,7 +21,9 @@ export default function MainComponent({ navigation }) {
 
   const [cargando, setCargando] = useState(true); //<-- En casos de poner donut de carga
 
-  //DataSource lavanderias (EXTERNALIZARLAS EN UTILS)
+  //DATASOURCES ( EXTERNALIZAR ) ----------------------------------------------------------------------------
+
+  //DataSource lavanderias
   useEffect(() => {
     const dataSourceGetLavanderias = async () => {
       try {
@@ -79,16 +82,19 @@ export default function MainComponent({ navigation }) {
     dataSourceGetVehiculoLavanderia();
   }, [lavanderiaSelccionada]);
 
+  //DATASOURCES ( EXTERNALIZAR ) ----------------------------------------------------------------------------
+
+  //Render
   return (
-    <View style={styles.mainComponent}>
+    <View style={PantallaLogin.mainComponent}>
       <View>
-        <Image source={logo} resizeMode="cover" style={styles.imagen} />
+        <Image source={logo} resizeMode="cover" style={PantallaLogin.imagen} />
       </View>
-      <View style={styles.contenedorSelectores}>
-        <View style={styles.contenedorDropdown}>
-          <Text style={styles.labelContenedor}>Lavandería</Text>
+      <View style={PantallaLogin.contenedorSelectores}>
+        <View style={PantallaLogin.contenedorDropdown}>
+          <Text style={PantallaLogin.labelContenedor}>Lavandería</Text>
           <Dropdown
-            style={styles.dropdown}
+            style={PantallaLogin.dropdown}
             data={lavanderias}
             search
             valueField="idLavanderia"
@@ -108,10 +114,10 @@ export default function MainComponent({ navigation }) {
           />
         </View>
 
-        <View style={styles.contenedorDropdown}>
-          <Text style={styles.labelContenedor}>Persona</Text>
+        <View style={PantallaLogin.contenedorDropdown}>
+          <Text style={PantallaLogin.labelContenedor}>Persona</Text>
           <Dropdown
-            style={styles.dropdown}
+            style={PantallaLogin.dropdown}
             data={personas}
             search
             valueField="idPersona"
@@ -127,10 +133,10 @@ export default function MainComponent({ navigation }) {
           />
         </View>
 
-        <View style={styles.contenedorDropdown}>
-          <Text style={styles.labelContenedor}>Vehículo</Text>
+        <View style={PantallaLogin.contenedorDropdown}>
+          <Text style={PantallaLogin.labelContenedor}>Vehículo</Text>
           <Dropdown
-            style={styles.dropdown}
+            style={PantallaLogin.dropdown}
             data={vehiculos}
             search
             valueField="idVehiculo"
@@ -150,7 +156,7 @@ export default function MainComponent({ navigation }) {
           />
         </View>
         <TouchableOpacity
-          style={styles.boton}
+          style={PantallaLogin.boton}
           onPress={() => {
             navigation.navigate("Botones", {
               idLavanderia: lavanderiaSelccionada,
@@ -162,64 +168,9 @@ export default function MainComponent({ navigation }) {
             });
           }}
         >
-          <Text style={styles.botonText}>SIGUIENTE</Text>
+          <Text style={PantallaLogin.botonText}>SIGUIENTE</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  mainComponent: {
-    backgroundColor: "white",
-    height: "100%",
-  },
-  contenedorSelectores: {
-    justifyContent: "center",
-    alignSelf: "center",
-    marginTop: "10%",
-    color: colors.lightBlack,
-    width: "320px",
-    backgroundColor: "white",
-  },
-  imagen: {
-    width: "95%",
-    alignSelf: "center",
-    height: 125,
-    marginTop: 20,
-  },
-  contenedorDropdown: {
-    padding: 16,
-    backgroundColor: "white",
-  },
-  labelContenedor: {
-    position: "absolute",
-    backgroundColor: "white",
-    left: 22,
-    top: 8,
-    zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
-  },
-  dropdown: {
-    height: 50,
-    borderColor: "#EDB637",
-    borderWidth: 0.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-  },
-  boton: {
-    marginTop: 15,
-    backgroundColor: "#EDB637",
-    width: 180,
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    borderRadius: 10,
-  },
-  botonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-});

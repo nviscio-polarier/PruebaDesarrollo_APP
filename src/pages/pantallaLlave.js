@@ -3,12 +3,19 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Dropdown } from "react-native-element-dropdown";
 import icono from "./fotos/icono.png";
+import { PantallaRecogida } from "./styles";
 
 export default function PantallaLlave({ route }) {
-  const [recoger, setRecoger] = useState(false);
+  //Hooks
   const [dejar, setDejar] = useState(false);
-  const [taquillaLavanderia, setTaquillaLavanderia] = useState([]);
-  const [estadoTaquilla, setEstadoTaquilla] = useState([]);
+  const [estado, setEstado] = useState(false);
+  const [posicionSeleccionada, setPosicionSeleccionada] = useState([]);
+  const [taquillaLavanderia, setTaquillaLavanderia] = useState([]); //<-- Sin funcionalidad, datos de taquilla recogido falta filtro por taquilla
+  const [recoger, setRecoger] = useState(false); //<-- Gestiona el estado de los botones y dropdown
+  const date = new Date(); //<-- Recoge la fecha actual
+
+  //Mockup
+  const taquilla = 13;
 
   const datosDropdown = [
     { posicion: "1", value: 1 },
@@ -27,11 +34,6 @@ export default function PantallaLlave({ route }) {
     { posicion: "14", value: 14 },
   ];
 
-  const [posicionSeleccionada, setPosicionSeleccionada] = useState([]);
-
-  const [estado, setEstado] = useState(false);
-  const date = new Date();
-
   //Guarrada a cambiar
   const formatDate = (date) => {
     return date.toISOString().split("T")[0];
@@ -44,6 +46,8 @@ export default function PantallaLlave({ route }) {
   const { labelPersona } = route.params;
   const { idVehiculo } = route.params;
   const { lavelVehiculo } = route.params;
+
+  //DATASOURCES ( EXTERNALIZAR ) ----------------------------------------------------------------------------
 
   //Recoge las taquillas asignadas a la lavanderia seleccionada.
   useEffect(() => {
@@ -62,24 +66,7 @@ export default function PantallaLlave({ route }) {
     dataSourceGetTaquillasLavanderia();
   }, []);
 
-  //Recoge los estados de las posiciones de las taquillas
-  useEffect(() => {
-    const dataSourceGetEstadoTaquillas = async () => {
-      try {
-        const response = await fetch(
-          `https://localhost:7136/odata/getRegistros`
-        );
-        const data = await response.json();
-        setEstadoTaquilla(data);
-        console.log("Datos estado Taquilla:", data);
-      } catch (error) {
-        console.log("ERROR API ESTADOS TAQUILLAS");
-      }
-    };
-    dataSourceGetEstadoTaquillas();
-  }, []);
-
-  //Crea registro de recogida de llave ( EXTERNALIZAR )
+  //Crea registro de recogida de llave
   const postMovimientoRecogida = async () => {
     const fechaFormateada = formatDate(date);
 
@@ -92,7 +79,7 @@ export default function PantallaLlave({ route }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            idTaquilla: 13,
+            idTaquilla: taquilla, //<-- Cambiar por dato real, actual mockup
             idVehiculo: idVehiculo,
             idPersona: idPersona,
             fechaRecogida: fechaFormateada,
@@ -126,7 +113,7 @@ export default function PantallaLlave({ route }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            idTaquilla: 13,
+            idTaquilla: taquilla, //<-- Cambiar por dato real, actual mockup
             idVehiculo: idVehiculo,
             idPersona: idPersona,
             fechaRecogida: null,
@@ -175,30 +162,37 @@ export default function PantallaLlave({ route }) {
     }
   };
 
+  //DATASOURCES ( EXTERNALIZAR ) ----------------------------------------------------------------------------
+
+  //Render
   return (
-    <View style={styles.mainComponent}>
-      <View style={styles.labels}>
-        <View style={styles.imageContainer}>
-          <Image source={icono} resizeMode="cover" style={styles.image} />
+    <View style={PantallaRecogida.mainComponent}>
+      <View style={PantallaRecogida.labels}>
+        <View style={PantallaRecogida.imageContainer}>
+          <Image
+            source={icono}
+            resizeMode="cover"
+            style={PantallaRecogida.image}
+          />
         </View>
-        <View style={styles.contenedorLabels}>
-          <View style={styles.iconosLabels}>
+        <View style={PantallaRecogida.contenedorLabels}>
+          <View style={PantallaRecogida.iconosLabels}>
             <MaterialCommunityIcons name="account" size={20} color={"black"} />
-            <Text style={styles.text}>{labelPersona}</Text>
+            <Text style={PantallaRecogida.text}>{labelPersona}</Text>
           </View>
-          <View style={styles.iconosLabels}>
+          <View style={PantallaRecogida.iconosLabels}>
             <MaterialCommunityIcons name="factory" size={20} color={"black"} />
-            <Text style={styles.text}>{labelLavanderia}</Text>
+            <Text style={PantallaRecogida.text}>{labelLavanderia}</Text>
           </View>
-          <View style={styles.iconosLabels}>
+          <View style={PantallaRecogida.iconosLabels}>
             <MaterialCommunityIcons name="truck" size={20} color={"black"} />
-            <Text style={styles.text}>{lavelVehiculo}</Text>
+            <Text style={PantallaRecogida.text}>{lavelVehiculo}</Text>
           </View>
         </View>
       </View>
-      <View style={styles.contenedorDropdown}>
+      <View style={PantallaRecogida.contenedorDropdown}>
         <Dropdown
-          style={styles.dropdown}
+          style={PantallaRecogida.dropdown}
           data={datosDropdown}
           valueField="value"
           labelField="posicion"
@@ -213,14 +207,17 @@ export default function PantallaLlave({ route }) {
       <View>
         <TouchableOpacity
           disabled={dejar}
-          style={[styles.boton, dejar && styles.botonDisabled]}
+          style={[
+            PantallaRecogida.boton,
+            dejar && PantallaRecogida.botonDisabled,
+          ]}
           onPress={() => {
             setRecoger(true);
             setDejar(true);
             postMovimientoRecogida();
           }}
         >
-          <View style={styles.iconos}>
+          <View style={PantallaRecogida.iconos}>
             <MaterialCommunityIcons
               name="key-chain"
               size={50}
@@ -232,20 +229,23 @@ export default function PantallaLlave({ route }) {
               color={"white"}
             />
           </View>
-          <Text style={styles.labelBoton}>RECOGER LLAVE</Text>
+          <Text style={PantallaRecogida.labelBoton}>RECOGER LLAVE</Text>
         </TouchableOpacity>
       </View>
       <View>
         <TouchableOpacity
           disabled={!dejar}
-          style={[styles.boton, !dejar && styles.botonDisabled]}
+          style={[
+            PantallaRecogida.boton,
+            !dejar && PantallaRecogida.botonDisabled,
+          ]}
           onPress={() => {
             setRecoger(false);
             setDejar(false);
             postMovimientoDejar();
           }}
         >
-          <View style={styles.iconos}>
+          <View style={PantallaRecogida.iconos}>
             <MaterialCommunityIcons
               name="key-chain"
               size={50}
@@ -257,101 +257,9 @@ export default function PantallaLlave({ route }) {
               color={"white"}
             />
           </View>
-          <Text style={styles.labelBoton}>DEJAR LLAVE</Text>
+          <Text style={PantallaRecogida.labelBoton}>DEJAR LLAVE</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  mainComponent: {
-    backgroundColor: "white",
-    height: "100%",
-  },
-  botonesComponente: {
-    marginTop: "10px",
-    width: "200px",
-    marginLeft: "90px",
-  },
-  labels: {
-    marginTop: "10px",
-    marginBottom: 20,
-    marginLeft: "20px",
-    marginRight: "20px",
-    borderWidth: 2,
-    borderRadius: 10,
-    borderColor: "#EDB637",
-    padding: 10,
-    display: "flex",
-    flexDirection: "row",
-  },
-  boton: {
-    marginTop: 10,
-    backgroundColor: "#EDB637",
-    width: "89%",
-    height: "150px",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    borderRadius: 10,
-  },
-  botonDisabled: {
-    marginTop: 10,
-    backgroundColor: "rgb(129,129,129)",
-    width: "89%",
-    height: "150px",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    borderRadius: 10,
-  },
-  labelBoton: {
-    marginTop: 10,
-    color: "white",
-    fontWeight: "bold",
-  },
-  iconos: {
-    display: "flex",
-    flexDirection: "row",
-  },
-  iconosLabels: {
-    display: "flex",
-    flexDirection: "row",
-  },
-  contenedorLabels: {
-    marginLeft: 10,
-    marginTop: 3,
-  },
-  text: {
-    marginLeft: 5,
-  },
-  image: {
-    width: 40,
-    height: 40,
-    alignSelf: "center",
-  },
-  imageContainer: {
-    width: 70,
-    height: 70,
-    borderRadius: "50%",
-    borderWidth: 2,
-    borderColor: "#EDB637",
-    alignContent: "center",
-    justifyContent: "center",
-  },
-  contenedorDropdown: {
-    padding: 16,
-    marginLeft: 5,
-    backgroundColor: "white",
-    marginBottom: -15,
-  },
-  dropdown: {
-    height: 40,
-    width: "50%",
-    borderColor: "#EDB637",
-    borderWidth: 0.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-  },
-});
